@@ -22,7 +22,7 @@ dag = DAG(
 
 # replace cluster-name with the name of your cluster
 bash_cmd = """
-cd /home/ubuntu/cookie_consent/
+cd /home/ubuntu/spark-airflow/
 ./stop_cluster.sh cluster-name > EndTask.log
 """
 
@@ -45,7 +45,7 @@ for i in range(len(data_list)):
     conn_id='spark_default',
     deploy_mode='cluster',
     packages='org.postgresql:postgresql:9.4.1207.jre7,org.apache.hadoop:hadoop-aws:2.7.0',
-    application='file:///home/ubuntu/cookie_consent/src/cc-main.py',
+    application='file:///home/ubuntu/spark-airflow/src/cc-main.py',
     application_args=['--warc_paths_file_address', 'hdfs://{}:9000/user/warc/{}'.format(hdfs_ip,data_list[i]),
             '--geoip_table_address', 'hdfs://{}:9000/user/geoip/GeoLite2-City.mmdb'.format(hdfs_ip),
             '--jdbc_url', 'jdbc:postgresql://{}:5432/cookie_consent'.format(db_ip),
@@ -55,7 +55,7 @@ for i in range(len(data_list)):
     executor_cores='1',
     driver_memory='4g',
     verbose=True,
-    py_files='file:///home/ubuntu/cookie_consent/deps.zip',
+    py_files='file:///home/ubuntu/spark-airflow/deps.zip',
     dag=dag,
     ))
     if i != 0:
